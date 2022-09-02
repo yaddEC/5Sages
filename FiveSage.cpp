@@ -2,19 +2,209 @@
 //
 
 #include <iostream>
+#include <chrono>
+#include <mutex>
+#include <thread>
+#define numberOfSage       100
+#define minTime       1000
+#define maxTime       3000
+
+std::mutex umutEX;
+
+struct Sage
+{
+	char state;
+	int chopstick[2];
+	int fullness;
+
+};
+
+int inline RandomTime()
+{
+	return  minTime + (rand() % static_cast<int>(maxTime - minTime + 1));
+}
+
+
+void SageDoing(Sage& sage, bool(&chopstick)[numberOfSage],int index)
+{
+	std::lock_guard<std::mutex> lock(umutEX);
+
+
+	if (sage.state == 'S')
+	{
+		int duration = RandomTime();
+		std::this_thread::sleep_for(std::chrono::milliseconds(duration));
+
+	}
+	if (sage.state == 'F')
+	{
+		int duration = RandomTime();
+		std::this_thread::sleep_for(std::chrono::milliseconds(duration));
+		sage.state = 'S';
+
+	}
+	if (sage.state == 'M')
+	{
+		int duration = RandomTime();
+		std::this_thread::sleep_for(std::chrono::milliseconds(duration));
+		sage.fullness += duration/1000;
+		chopstick[sage.chopstick[0]] = true;
+		chopstick[sage.chopstick[1]] = true;
+		sage.state = 'F';
+		sage.chopstick[0] = -1;
+		sage.chopstick[1] = -1;
+
+	}
+
+
+	if ((sage.state == 'S' || sage.state == 'C') && sage.fullness < 5)
+	{
+		for (int i = 0; i < numberOfSage; i++)
+		{
+
+			if (sage.chopstick[0] > -1 && sage.chopstick[1] > -1)
+			{
+				sage.state = 'M';
+				break;
+			}
+			if (chopstick[index])
+			{
+				chopstick[index] = false;
+				if (sage.chopstick[0] == -1)
+					sage.chopstick[0] = index;
+				else
+					sage.chopstick[1] = index;
+			}
+
+			if (index== numberOfSage - 1)
+			{
+
+				if (chopstick[0])
+				{
+					chopstick[0] = false;
+						if (sage.chopstick[0] == -1)
+							sage.chopstick[0] = 0;
+						else
+							sage.chopstick[1] = 0;
+				}
+
+			}
+			else
+			{
+
+				 if (chopstick[index+1])
+				{
+					chopstick[index+1] = false;
+					if (sage.chopstick[0] == -1)
+						sage.chopstick[0] = index+1;
+					else
+						sage.chopstick[1] = index+1;
+				}
+
+
+			}
+			if (i == numberOfSage - 1)
+			{
+				if (sage.chopstick[0] != -1)
+				{
+					chopstick[sage.chopstick[0]] = true;
+					sage.chopstick[0] = -1;
+				}
+
+				sage.state = 'C';
+			}
+
+		}
+		// initiate try to eat
+		//if chop
+		//initiate random time eating 
+		// sage.state = 'S';
+		//else
+		//sage.state = 'C';
+	}
+
+
+	else if (sage.state == 'I')
+	{
+		sage.state = 'S';
+		//print he think
+		// wait
+	}
+
+
+
+
+}
+
+
+void Clear()//function that refresh the command console (found online)
+{
+#if defined _WIN32
+	system("cls");
+	//clrscr(); // including header file : conio.h
+#elif defined (__LINUX__) || defined(__gnu_linux__) || defined(__linux__)
+	system("clear");
+	//std::cout<< u8"\033[2J\033[1;1H"; //Using ANSI Escape Sequences 
+#elif defined (__APPLE__)
+	system("clear");
+#endif
+}
+
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	Sage sage[numberOfSage];
+	bool chopstick[numberOfSage];
+	int day = 0;
+	std::thread threads[numberOfSage];
+
+	for (int i = 0; i < numberOfSage; i++)
+	{
+		sage[i] = { 'I',{-1,-1},0 };//'I' like init
+		chopstick[i] = true;
+	}
+
+
+	while (day < 7)
+	{
+		for (int i = 0; i < numberOfSage; i++)
+		{
+			threads[i] = std::thread(SageDoing, std::ref(sage[i]), std::ref(chopstick),i);
+		}
+
+		int fullSage = 0;
+		Clear();
+		std::cout << "\n" << "JOUR " << day+1<< "\n";
+		for (int i = 0; i < numberOfSage; i++)
+		{
+			if (sage[i].fullness >= 5)
+				fullSage++;
+			std::cout << sage[i].state;
+		}
+		std::cout << "\n";
+		for (int i = 0; i < numberOfSage; i++)
+		{
+			std::cout  << chopstick[i];
+		}
+		
+
+
+		if (fullSage == numberOfSage)
+		{
+			day++;
+			for (int i = 0; i < numberOfSage; i++)
+			{
+				sage[i] = { 'I',{-1,-1},0 };//'I' like init
+				chopstick[i] = true;
+			}
+
+		}
+
+		for (int i = 0; i < numberOfSage; i++)
+		{
+			threads[i].join();
+
+		}
+	}
 }
 
-// Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
-// Déboguer le programme : F5 ou menu Déboguer > Démarrer le débogage
-
-// Astuces pour bien démarrer : 
-//   1. Utilisez la fenêtre Explorateur de solutions pour ajouter des fichiers et les gérer.
-//   2. Utilisez la fenêtre Team Explorer pour vous connecter au contrôle de code source.
-//   3. Utilisez la fenêtre Sortie pour voir la sortie de la génération et d'autres messages.
-//   4. Utilisez la fenêtre Liste d'erreurs pour voir les erreurs.
-//   5. Accédez à Projet > Ajouter un nouvel élément pour créer des fichiers de code, ou à Projet > Ajouter un élément existant pour ajouter des fichiers de code existants au projet.
-//   6. Pour rouvrir ce projet plus tard, accédez à Fichier > Ouvrir > Projet et sélectionnez le fichier .sln.
