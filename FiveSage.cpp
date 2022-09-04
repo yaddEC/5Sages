@@ -5,9 +5,9 @@
 #include <chrono>
 #include <mutex>
 #include <thread>
-#define numberOfSage       100
+#define numberOfSage       5
 #define minTime       1000
-#define maxTime       3000
+#define maxTime       5000
 
 std::mutex umutEX;
 
@@ -177,8 +177,7 @@ int main()
 		std::cout << "\n" << "JOUR " << day+1<< "\n";
 		for (int i = 0; i < numberOfSage; i++)
 		{
-			if (sage[i].fullness >= 5)
-				fullSage++;
+		
 			std::cout << sage[i].state;
 		}
 		std::cout << "\n";
@@ -189,6 +188,15 @@ int main()
 		
 
 
+
+
+		for (int i = 0; i < numberOfSage; i++)
+		{
+			threads[i].join();
+			if (sage[i].fullness >= 5)
+				fullSage++;
+		}
+
 		if (fullSage == numberOfSage)
 		{
 			day++;
@@ -197,12 +205,6 @@ int main()
 				sage[i] = { 'I',{-1,-1},0 };//'I' like init
 				chopstick[i] = true;
 			}
-
-		}
-
-		for (int i = 0; i < numberOfSage; i++)
-		{
-			threads[i].join();
 
 		}
 	}
