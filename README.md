@@ -12,7 +12,7 @@ The goal was to create a program that emulate the sages states and hunger, and t
 
 
 ## Overview
-![png](img/CAPTURE.png)
+![png](img/Capture.png)
 
 ## States
 -----------
@@ -38,6 +38,6 @@ The last sage can only take the first chopstick, or the one in front of him
 The color of the sages changes according to their hunger. If they are white, it means they are full.
 A day passes once every sage is full, and the program is over once 7 days have passed.
 
-![png](img/CAPTURE2.png)
+![png](img/Capture2.png)
 
 You can change the number of sages in the program, with the minimum and maximum random time too.
