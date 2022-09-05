@@ -140,6 +140,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FiveSage.cpp" />
+    <ClCompile Include="Sage.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
