@@ -102,12 +102,15 @@ void SageDoing(Sage& sage, bool(&chopstick)[numberOfSage], int index)
 
 		}
 
+
 	}
+
 
 	else if (sage.state == 'I')
 	{
 		sage.state = 'S';
 
 	}
-
 }
+
+
