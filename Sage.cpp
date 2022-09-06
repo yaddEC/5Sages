@@ -32,7 +32,7 @@ void SageDoing(Sage& sage, bool(&chopstick)[numberOfSage], int index)
 	{
 		int duration = RandomTime();
 		std::this_thread::sleep_for(std::chrono::milliseconds(duration));
-		sage.fullness += duration / 1000;
+		sage.fullness += (float)duration / 1000;
 		chopstick[sage.chopstick[0]] = true;
 		chopstick[sage.chopstick[1]] = true;
 		sage.state = 'F';

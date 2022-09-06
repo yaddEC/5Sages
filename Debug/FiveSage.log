@@ -1,2 +1,5 @@
 ﻿  FiveSage.cpp
+C:\Users\y.dechaux\source\repos\FiveSage\FiveSage\FiveSage.cpp(54,51): warning C4244: 'argument' : conversion de 'float' en 'WORD', perte possible de données
+  Sage.cpp
+  Génération de code en cours...
   FiveSage.vcxproj -> C:\Users\y.dechaux\source\repos\FiveSage\Debug\FiveSage.exe

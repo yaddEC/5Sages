@@ -12,7 +12,7 @@ struct Sage
 {
 	char state;
 	int chopstick[2];
-	int fullness;
+	float fullness;
 
 };
 
