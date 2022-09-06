@@ -101,20 +101,14 @@ void SageDoing(Sage& sage, bool(&chopstick)[numberOfSage], int index)
 			}
 
 		}
-		// initiate try to eat
-		//if chop
-		//initiate random time eating 
-		// sage.state = 'S';
-		//else
-		//sage.state = 'C';
+
 	}
 
 
 	else if (sage.state == 'I')
 	{
 		sage.state = 'S';
-		//print he think
-		// wait
+
 	}
 
 
